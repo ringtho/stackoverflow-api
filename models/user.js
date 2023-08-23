@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 
@@ -23,6 +24,11 @@ const userSchema = new Schema({
     required: ['Please provide your password'],
     minlength: 6
   }
+})
+
+userSchema.pre('save', async function () {
+  const salt = await bcrypt.genSalt(10)
+  this.password = await bcrypt.hash(this.password, salt)
 })
 
 userSchema.methods.createJWT = function () {
