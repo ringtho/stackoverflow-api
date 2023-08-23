@@ -36,4 +36,8 @@ userSchema.methods.createJWT = function () {
     { expiresIn: '30d' })
 }
 
+userSchema.methods.checkPassword = async function (password) {
+  return await bcrypt.compare(this.password, password)
+}
+
 module.exports = mongoose.model('User', userSchema)
