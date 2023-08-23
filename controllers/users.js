@@ -7,7 +7,9 @@ const signup = async (req, res) => {
   const salt = await bcrypt.genSalt(10)
   const tempPassword = await bcrypt.hash(password, salt)
   const user = await User.create({ name, email, password: tempPassword })
-  res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token: 'token' })
+
+  const token = user.createJWT()
+  res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token })
 }
 
 const login = async (req, res) => {
