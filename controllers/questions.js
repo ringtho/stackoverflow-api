@@ -23,8 +23,7 @@ const getSingleQuestion = async (req, res) => {
 }
 
 const updateQuestion = async (req, res) => {
-  const questionId = req.params.id
-  const userId = req.user.userId
+  const { params: { id: questionId }, user: { userId } } = req
   const question = await Question.findOneAndUpdate({ _id: questionId, createdBy: userId },
     req.body,
     { new: true, runValidators: true }
@@ -46,10 +45,20 @@ const deleteQuestion = async (req, res) => {
   })
 }
 
+const getUserCreatedQuestions = async (req, res) => {
+  const userId = req.params.userId
+  const questions = await Question.find({ createdBy: userId })
+  if (questions.length === 0) {
+    throw new NotFoundError(`No questions posted by the user with id ${userId}`)
+  }
+  res.status(StatusCodes.OK).json({ questions, count: questions.length })
+}
+
 module.exports = {
   getAllQuestions,
   createQuestion,
   getSingleQuestion,
   updateQuestion,
-  deleteQuestion
+  deleteQuestion,
+  getUserCreatedQuestions
 }

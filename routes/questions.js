@@ -6,7 +6,8 @@ const {
   createQuestion,
   getSingleQuestion,
   updateQuestion,
-  deleteQuestion
+  deleteQuestion,
+  getUserCreatedQuestions
 } = require('../controllers/questions')
 
 router.route('/')
@@ -17,5 +18,7 @@ router.route('/:id')
   .get(getSingleQuestion)
   .patch(updateQuestion)
   .delete(deleteQuestion)
+
+router.route('/users/:userId').get(getUserCreatedQuestions)
 
 module.exports = router
