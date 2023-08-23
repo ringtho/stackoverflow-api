@@ -13,6 +13,11 @@ const questionSchema = new Schema({
   },
   tag: {
     type: Array
+  },
+  createdBy: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Login to continue']
   }
 }, { timestamps: true })
 

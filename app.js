@@ -3,17 +3,18 @@ require('express-async-errors')
 
 const express = require('express')
 const app = express()
-
 const connectDB = require('./db/connectDB')
+
 const usersRouter = require('./routes/users')
 const questionsRouter = require('./routes/questions')
 
+const authenticateUser = require('./middleware/authentication')
 const notFoundMiddleware = require('./middleware/notFound')
 const errorHandler = require('./middleware/error-handler')
 
 app.use(express.json())
 app.use('/api/v1/auth', usersRouter)
-app.use('/api/v1/questions', questionsRouter)
+app.use('/api/v1/questions', authenticateUser, questionsRouter)
 
 app.get('/', (req, res) => {
   res.send('<h1>StackOverflow</h1>')

@@ -8,6 +8,7 @@ const getAllQuestions = async (req, res) => {
 }
 
 const createQuestion = async (req, res) => {
+  req.body.createdBy = req.user.userId
   const question = await Question.create(req.body)
   res.status(StatusCodes.CREATED).json({ question })
 }
@@ -23,7 +24,8 @@ const getSingleQuestion = async (req, res) => {
 
 const updateQuestion = async (req, res) => {
   const questionId = req.params.id
-  const question = await Question.findOneAndUpdate({ _id: questionId },
+  const userId = req.user.userId
+  const question = await Question.findOneAndUpdate({ _id: questionId, createdBy: userId },
     req.body,
     { new: true, runValidators: true }
   )
@@ -34,8 +36,8 @@ const updateQuestion = async (req, res) => {
 }
 
 const deleteQuestion = async (req, res) => {
-  const questionId = req.params.id
-  const question = await Question.findOneAndRemove({ _id: questionId })
+  const { params: { id: questionId }, user: { userId } } = req
+  const question = await Question.findOneAndRemove({ _id: questionId, createdBy: userId })
   if (!question) {
     throw new NotFoundError(`Question with id ${questionId} does not exist`)
   }
