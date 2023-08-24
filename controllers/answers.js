@@ -34,7 +34,24 @@ const updateAnswer = async (req, res) => {
   res.status(StatusCodes.OK).json({ answer })
 }
 
+const deleteAnswer = async (req, res) => {
+  const { id: questionId, answerId } = req.params
+  const userId = req.user.userId
+  const question = await Question.findOne({ _id: questionId })
+  if (!question) {
+    throw new NotFoundError(`Question with id ${questionId} does not exist`)
+  }
+  const answer = await Answer.findOneAndRemove({ _id: answerId, createdBy: userId })
+  if (!answer) {
+    throw new NotFoundError(`Answer with id ${answerId} does not exist`)
+  }
+  res.status(StatusCodes.OK).json({
+    msg: `Successfully deleted answer with id ${answerId}`
+  })
+}
+
 module.exports = {
   createAnswer,
-  updateAnswer
+  updateAnswer,
+  deleteAnswer
 }
