@@ -1,9 +1,10 @@
 const Question = require('../models/question')
+const Answer = require('../models/answer')
 const { StatusCodes } = require('http-status-codes')
 const { NotFoundError } = require('../errors')
 
 const getAllQuestions = async (req, res) => {
-  const questions = await Question.find({ })
+  const questions = await Question.find({ }).sort('-updatedAt')
   res.status(StatusCodes.OK).json({ questions, count: questions.length })
 }
 
@@ -19,7 +20,8 @@ const getSingleQuestion = async (req, res) => {
   if (!question) {
     throw new NotFoundError(`Question with id ${questionId} does not exist`)
   }
-  res.status(StatusCodes.OK).json({ question })
+  const answers = await Answer.find({ questionId }).sort('-updatedAt')
+  res.status(StatusCodes.OK).json({ question, answers, count: answers.length })
 }
 
 const updateQuestion = async (req, res) => {
@@ -50,7 +52,7 @@ const deleteQuestion = async (req, res) => {
 
 const getUserCreatedQuestions = async (req, res) => {
   const userId = req.params.userId
-  const questions = await Question.find({ createdBy: userId })
+  const questions = await Question.find({ createdBy: userId }).sort('-updatedAt')
   if (questions.length === 0) {
     throw new NotFoundError(`No questions posted by the user with id ${userId}`)
   }

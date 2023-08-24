@@ -16,6 +16,10 @@ const answerSchema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: 'User',
     required: [true, 'Login to continue']
+  },
+  preferred: {
+    type: Boolean,
+    default: false
   }
 }, { timestamps: true })
 
