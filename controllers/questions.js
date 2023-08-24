@@ -24,7 +24,8 @@ const getSingleQuestion = async (req, res) => {
 
 const updateQuestion = async (req, res) => {
   const { params: { id: questionId }, user: { userId } } = req
-  const question = await Question.findOneAndUpdate({ _id: questionId, createdBy: userId },
+  const question = await Question.findOneAndUpdate(
+    { _id: questionId, createdBy: userId },
     req.body,
     { new: true, runValidators: true }
   )
@@ -36,7 +37,9 @@ const updateQuestion = async (req, res) => {
 
 const deleteQuestion = async (req, res) => {
   const { params: { id: questionId }, user: { userId } } = req
-  const question = await Question.findOneAndRemove({ _id: questionId, createdBy: userId })
+  const question = await Question.findOneAndRemove(
+    { _id: questionId, createdBy: userId }
+  )
   if (!question) {
     throw new NotFoundError(`Question with id ${questionId} does not exist`)
   }

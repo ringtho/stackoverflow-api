@@ -9,6 +9,7 @@ const {
   deleteQuestion,
   getUserCreatedQuestions
 } = require('../controllers/questions')
+const { createAnswer } = require('../controllers/answers')
 
 router.route('/')
   .get(getAllQuestions)
@@ -18,6 +19,8 @@ router.route('/:id')
   .get(getSingleQuestion)
   .patch(updateQuestion)
   .delete(deleteQuestion)
+
+router.route('/:id/answers').post(createAnswer)
 
 router.route('/users/:userId').get(getUserCreatedQuestions)
 
