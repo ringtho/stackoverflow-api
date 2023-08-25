@@ -42,6 +42,9 @@ router.route('/:id/answers/:answerId')
   .patch(makePreferredAnswer)
   .delete(deleteAnswer)
 
+// router.route('/:id/answers/:answerId/vote')
+//   .patch(upvoteAnswer)
+
 // comments
 router.route('/:id/answers/:answerId/comments')
   .post(createComment)
