@@ -1,7 +1,11 @@
 const Comment = require('../models/comment')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, UnAuthenticatedError } = require('../errors')
-const { checkQuestionExists, checkAnswerExists } = require('./utils')
+const {
+  checkQuestionExists,
+  checkAnswerExists,
+  checkCommentExists
+} = require('./utils')
 
 const createComment = async (req, res) => {
   const { id: questionId, answerId } = req.params
@@ -12,7 +16,11 @@ const createComment = async (req, res) => {
   }
   await checkQuestionExists(questionId)
   await checkAnswerExists(answerId)
-  const comment = await Comment.create({ comment: data, createdBy: userId, answerId })
+  const comment = await Comment.create({
+    comment: data,
+    createdBy: userId,
+    answerId
+  })
   res.status(StatusCodes.CREATED).json({ comment })
 }
 
@@ -20,8 +28,24 @@ const updateComment = (req, res) => {
   res.status(StatusCodes.CREATED).json({ msg: 'Updated Comment' })
 }
 
-const deleteComment = (req, res) => {
-  res.status(StatusCodes.CREATED).json({ msg: 'Delete Comment', data: res.body })
+const deleteComment = async (req, res) => {
+  const {
+    params: { id: questionId, answerId, commentId },
+    user: { userId }
+  } = req
+  await checkQuestionExists(questionId)
+  await checkAnswerExists(answerId)
+  await checkCommentExists(commentId)
+  const comment = await Comment.findOneAndRemove({
+    _id: commentId,
+    createdBy: userId
+  })
+  if (!comment) {
+    throw new UnAuthenticatedError('You are unauthorized!')
+  }
+  res.status(StatusCodes.OK).json({
+    msg: `Successfully deleted comment with id ${commentId}`
+  })
 }
 
 module.exports = {

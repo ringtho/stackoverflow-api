@@ -1,5 +1,6 @@
 const Question = require('../models/question')
 const Answer = require('../models/answer')
+const Comment = require('../models/comment')
 const { NotFoundError } = require('../errors')
 
 const checkQuestionExists = async (questionId) => {
@@ -18,4 +19,12 @@ const checkAnswerExists = async (answerId) => {
   return answer
 }
 
-module.exports = { checkQuestionExists, checkAnswerExists }
+const checkCommentExists = async (commentId) => {
+  const comment = await Comment.findOne({ _id: commentId })
+  if (!comment) {
+    throw new NotFoundError(`Comment with id ${commentId} does not exist`)
+  }
+  return comment
+}
+
+module.exports = { checkQuestionExists, checkAnswerExists, checkCommentExists }

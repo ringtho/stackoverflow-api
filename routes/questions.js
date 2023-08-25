@@ -13,7 +13,8 @@ const {
   createAnswer,
   updateAnswer,
   deleteAnswer,
-  makePreferredAnswer
+  makePreferredAnswer,
+  getAnswer
 } = require('../controllers/answers')
 const {
   createComment,
@@ -33,6 +34,7 @@ router.route('/:id')
 // answers
 router.route('/:id/answers').post(createAnswer)
 router.route('/:id/answers/:answerId')
+  .get(getAnswer)
   .put(updateAnswer)
   .patch(makePreferredAnswer)
   .delete(deleteAnswer)
