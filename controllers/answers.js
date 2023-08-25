@@ -21,7 +21,9 @@ const createAnswer = async (req, res) => {
   if (!solution) {
     throw new BadRequestError('Please provide an answer to continue')
   }
-  const answer = await Answer.create({ answer: solution, createdBy, questionId, questionAuthor })
+  const answer = await Answer.create({
+    answer: solution, createdBy, questionId, questionAuthor
+  })
   res.status(StatusCodes.CREATED).json({ answer })
 }
 
@@ -34,8 +36,11 @@ const updateAnswer = async (req, res) => {
   }
   await checkQuestionExists(questionId)
   await checkAnswerExists(answerId)
-  const answer = await Answer.findOneAndUpdate({ _id: answerId, createdBy: userId },
-    { answer: solution }, { new: true, runValidators: true })
+  const answer = await Answer.findOneAndUpdate(
+    { _id: answerId, createdBy: userId },
+    { answer: solution },
+    { new: true, runValidators: true }
+  )
   if (!answer) {
     throw new UnAuthenticatedError('You are unauthorized!')
   }
@@ -47,7 +52,9 @@ const deleteAnswer = async (req, res) => {
   const userId = req.user.userId
   await checkQuestionExists(questionId)
   await checkAnswerExists(answerId)
-  const answer = await Answer.findOneAndRemove({ _id: answerId, createdBy: userId })
+  const answer = await Answer.findOneAndRemove(
+    { _id: answerId, createdBy: userId }
+  )
   if (!answer) {
     throw new UnAuthenticatedError('You are unauthorized!')
   }
@@ -65,7 +72,8 @@ const makePreferredAnswer = async (req, res) => {
   const userId = req.user.userId
   await checkQuestionExists(questionId)
   await checkAnswerExists(answerId)
-  const answer = await Answer.findOneAndUpdate({ _id: answerId, questionAuthor: userId },
+  const answer = await Answer.findOneAndUpdate(
+    { _id: answerId, questionAuthor: userId },
     { preferred }, { new: true, runValidators: true })
   if (!answer) {
     throw new UnAuthenticatedError('You are unauthorized!')
