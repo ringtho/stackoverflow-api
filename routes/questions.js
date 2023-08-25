@@ -15,6 +15,11 @@ const {
   deleteAnswer,
   makePreferredAnswer
 } = require('../controllers/answers')
+const {
+  createComment,
+  updateComment,
+  deleteComment
+} = require('../controllers/comments')
 
 router.route('/')
   .get(getAllQuestions)
@@ -25,11 +30,19 @@ router.route('/:id')
   .patch(updateQuestion)
   .delete(deleteQuestion)
 
+// answers
 router.route('/:id/answers').post(createAnswer)
 router.route('/:id/answers/:answerId')
   .put(updateAnswer)
   .patch(makePreferredAnswer)
   .delete(deleteAnswer)
+
+// comments
+router.route('/:id/answers/:answerId/comments')
+  .post(createComment)
+router.route('/:id/answers/:answerId/comments/:commentId')
+  .patch(updateComment)
+  .delete(deleteComment)
 
 router.route('/users/:userId').get(getUserCreatedQuestions)
 
