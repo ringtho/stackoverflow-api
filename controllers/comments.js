@@ -24,8 +24,26 @@ const createComment = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ comment })
 }
 
-const updateComment = (req, res) => {
-  res.status(StatusCodes.CREATED).json({ msg: 'Updated Comment' })
+const updateComment = async (req, res) => {
+  const {
+    params: { id: questionId, answerId, commentId },
+    user: { userId }
+  } = req
+  const { comment: data } = req.body
+  if (!data) {
+    throw new BadRequestError('Please provide a comment to the answer')
+  }
+  await checkQuestionExists(questionId)
+  await checkAnswerExists(answerId)
+  await checkCommentExists(commentId)
+  const comment = await Comment.findOneAndUpdate(
+    { _id: commentId, createdBy: userId },
+    { comment: data }, { new: true, runValidators: true }
+  )
+  if (!comment) {
+    throw new UnAuthenticatedError('You are unauthorized!')
+  }
+  res.status(StatusCodes.CREATED).json({ comment })
 }
 
 const deleteComment = async (req, res) => {
