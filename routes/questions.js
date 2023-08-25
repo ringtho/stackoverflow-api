@@ -12,7 +12,8 @@ const {
 const {
   createAnswer,
   updateAnswer,
-  deleteAnswer
+  deleteAnswer,
+  makePreferredAnswer
 } = require('../controllers/answers')
 
 router.route('/')
@@ -26,7 +27,8 @@ router.route('/:id')
 
 router.route('/:id/answers').post(createAnswer)
 router.route('/:id/answers/:answerId')
-  .patch(updateAnswer)
+  .put(updateAnswer)
+  .patch(makePreferredAnswer)
   .delete(deleteAnswer)
 
 router.route('/users/:userId').get(getUserCreatedQuestions)

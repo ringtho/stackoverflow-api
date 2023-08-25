@@ -14,7 +14,7 @@ const authenticateUser = async (req, res, next) => {
     req.user = { userId, name }
     next()
   } catch (error) {
-    throw new UnAuthenticatedError('Invalid token')
+    throw new UnAuthenticatedError('Authentication Invalid')
   }
 }
 

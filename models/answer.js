@@ -12,6 +12,11 @@ const answerSchema = new Schema({
     ref: 'Question',
     required: [true, 'Login to continue']
   },
+  questionAuthor: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Question',
+    required: [true, 'Login to continue']
+  },
   createdBy: {
     type: mongoose.Types.ObjectId,
     ref: 'User',
