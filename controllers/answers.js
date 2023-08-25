@@ -9,7 +9,9 @@ const getAnswer = async (req, res) => {
   await checkQuestionExists(questionId)
   const answer = await checkAnswerExists(answerId)
   const comments = await Comment.find({ answerId })
-  res.status(StatusCodes.OK).json({ answer, comments, count: comments.length })
+  res.status(StatusCodes.OK).json(
+    { answer, comments, count: comments.length }
+  )
 }
 
 const createAnswer = async (req, res) => {
