@@ -7,7 +7,8 @@ const {
   getSingleQuestion,
   updateQuestion,
   deleteQuestion,
-  getUserCreatedQuestions
+  getUserCreatedQuestions,
+  searchQuestions
 } = require('../controllers/questions')
 const {
   createAnswer,
@@ -30,6 +31,8 @@ router.route('/:id')
   .get(getSingleQuestion)
   .patch(updateQuestion)
   .delete(deleteQuestion)
+
+router.route('/search').post(searchQuestions)
 
 // answers
 router.route('/:id/answers').post(createAnswer)

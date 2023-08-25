@@ -1,7 +1,7 @@
 const Question = require('../models/question')
 const Answer = require('../models/answer')
 const { StatusCodes } = require('http-status-codes')
-const { NotFoundError } = require('../errors')
+const { NotFoundError, BadRequestError } = require('../errors')
 
 const getAllQuestions = async (req, res) => {
   const questions = await Question.find({ }).sort('-updatedAt')
@@ -50,6 +50,18 @@ const deleteQuestion = async (req, res) => {
   })
 }
 
+const searchQuestions = async (req, res) => {
+  const { search } = req.body
+  if (!search) {
+    throw new BadRequestError('Please provide a search parameter')
+  }
+  const regex = new RegExp(search, 'i')
+  const questions = await Question.find({
+    title: { $regex: regex }
+  })
+  res.status(StatusCodes.OK).json({ questions })
+}
+
 const getUserCreatedQuestions = async (req, res) => {
   const userId = req.params.userId
   const questions = await Question.find({ createdBy: userId }).sort('-updatedAt')
@@ -65,5 +77,6 @@ module.exports = {
   getSingleQuestion,
   updateQuestion,
   deleteQuestion,
+  searchQuestions,
   getUserCreatedQuestions
 }
