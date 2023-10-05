@@ -19,7 +19,8 @@ const login = async (req, res) => {
     throw new UnAuthenticatedError('Invalid Credentials')
   }
 
-  const isPasswordCorrect = user.checkPassword(password)
+  const isPasswordCorrect = await user.checkPassword(password)
+  console.log(isPasswordCorrect)
   if (!isPasswordCorrect) {
     throw new UnAuthenticatedError('Invalid Credentials')
   }
