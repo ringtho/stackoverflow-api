@@ -26,6 +26,8 @@ const answerSchema = new Schema({
     type: Boolean,
     default: false
   }
-}, { timestamps: true })
+}, {
+  timestamps: true
+})
 
 module.exports = mongoose.model('Answer', answerSchema)

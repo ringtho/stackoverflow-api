@@ -1,10 +1,11 @@
 const Question = require('../models/question')
-const Answer = require('../models/answer')
 const { StatusCodes } = require('http-status-codes')
 const { NotFoundError, BadRequestError } = require('../errors')
 
 const getAllQuestions = async (req, res) => {
-  const questions = await Question.find({ }).sort('-updatedAt')
+  const questions = await Question.find({ })
+    .populate('posted_by', 'name')
+    .sort('-updatedAt')
   res.status(StatusCodes.OK).json({ questions, count: questions.length })
 }
 
@@ -17,11 +18,12 @@ const createQuestion = async (req, res) => {
 const getSingleQuestion = async (req, res) => {
   const questionId = req.params.id
   const question = await Question.findOne({ _id: questionId })
+    .populate('posted_by', 'name')
+    .populate('answers')
   if (!question) {
     throw new NotFoundError(`Question with id ${questionId} does not exist`)
   }
-  const answers = await Answer.find({ questionId }).sort('-updatedAt')
-  res.status(StatusCodes.OK).json({ question, answers, count: answers.length })
+  res.status(StatusCodes.OK).json({ question })
 }
 
 const updateQuestion = async (req, res) => {

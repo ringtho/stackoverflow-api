@@ -25,6 +25,9 @@ const userSchema = new Schema({
     required: ['Please provide your password'],
     minlength: 6
   }
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 })
 
 userSchema.pre('save', async function () {
@@ -40,5 +43,12 @@ userSchema.methods.createJWT = function () {
 userSchema.methods.checkPassword = async function (password) {
   return await bcrypt.compare(password, this.password)
 }
+
+userSchema.virtual('questions', {
+  ref: 'Question',
+  localField: '_id',
+  foreignField: 'createdBy',
+  justOne: false
+})
 
 module.exports = mongoose.model('User', userSchema)

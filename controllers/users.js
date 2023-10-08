@@ -28,4 +28,15 @@ const login = async (req, res) => {
   res.status(StatusCodes.OK).json({ user: { name: user.name }, token })
 }
 
-module.exports = { signup, login }
+const getUserDetails = async (req, res) => {
+  const { userId } = req.user
+  const user = await User
+    .findOne({ _id: userId }, '_id name email')
+    .populate('questions')
+  if (!user) {
+    throw new UnAuthenticatedError('You are not authorized')
+  }
+  res.status(StatusCodes.OK).json({ user })
+}
+
+module.exports = { signup, login, getUserDetails }

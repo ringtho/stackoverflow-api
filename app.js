@@ -11,8 +11,9 @@ const cors = require('cors')
 const xss = require('xss-clean')
 const rateLimiter = require('express-rate-limit')
 
-const usersRouter = require('./routes/users')
+const authRouter = require('./routes/auth')
 const questionsRouter = require('./routes/questions')
+const userRouter = require('./routes/user')
 
 const authenticateUser = require('./middleware/authentication')
 const notFoundMiddleware = require('./middleware/notFound')
@@ -29,7 +30,8 @@ app.use(helmet())
 app.use(cors())
 app.use(xss())
 
-app.use('/api/v1/auth', usersRouter)
+app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/user', authenticateUser, userRouter)
 app.use('/api/v1/questions', authenticateUser, questionsRouter)
 
 app.get('/', (req, res) => {
