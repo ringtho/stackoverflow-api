@@ -5,6 +5,7 @@ const { NotFoundError, BadRequestError } = require('../errors')
 const getAllQuestions = async (req, res) => {
   const questions = await Question.find({ })
     .populate('posted_by', 'name')
+    .populate('answers')
     .sort('-updatedAt')
   res.status(StatusCodes.OK).json({ questions, count: questions.length })
 }
