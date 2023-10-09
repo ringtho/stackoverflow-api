@@ -1,5 +1,5 @@
 const Answer = require('../models/answer')
-const Comment = require('../models/comment')
+// const Comment = require('../models/comment')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, UnAuthenticatedError } = require('../errors')
 const { checkQuestionExists, checkAnswerExists } = require('./utils')
@@ -8,10 +8,9 @@ const getAnswer = async (req, res) => {
   const { id: questionId, answerId } = req.params
   await checkQuestionExists(questionId)
   const answer = await checkAnswerExists(answerId)
-  const comments = await Comment.find({ answerId })
-  res.status(StatusCodes.OK).json(
-    { answer, comments, count: comments.length }
-  )
+  console.log(answer)
+  // const comments = await Comment.find({ answerId })
+  res.status(StatusCodes.OK).json({ answer })
 }
 
 const createAnswer = async (req, res) => {

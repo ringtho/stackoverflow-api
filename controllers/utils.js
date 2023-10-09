@@ -12,7 +12,7 @@ const checkQuestionExists = async (questionId) => {
 }
 
 const checkAnswerExists = async (answerId) => {
-  const answer = await Answer.findOne({ _id: answerId })
+  const answer = await Answer.findOne({ _id: answerId }).populate('posted_by', 'name')
   if (!answer) {
     throw new NotFoundError(`Answer with id ${answerId} does not exist`)
   }

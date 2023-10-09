@@ -20,7 +20,10 @@ const getSingleQuestion = async (req, res) => {
   const questionId = req.params.id
   const question = await Question.findOne({ _id: questionId })
     .populate('posted_by', 'name')
-    .populate('answers')
+    .populate({
+      path: 'answers',
+      populate: { path: 'posted_by', select: 'name' }
+    })
   if (!question) {
     throw new NotFoundError(`Question with id ${questionId} does not exist`)
   }

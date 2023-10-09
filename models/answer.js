@@ -27,7 +27,17 @@ const answerSchema = new Schema({
     default: false
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 })
+
+answerSchema.virtual('posted_by', {
+  ref: 'User',
+  localField: 'createdBy',
+  foreignField: '_id',
+  justOne: true
+}
+)
 
 module.exports = mongoose.model('Answer', answerSchema)
