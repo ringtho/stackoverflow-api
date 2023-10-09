@@ -22,6 +22,9 @@ const getSingleQuestion = async (req, res) => {
     .populate('posted_by', 'name')
     .populate({
       path: 'answers',
+      options: {
+        sort: { updatedAt: -1 }
+      },
       populate: { path: 'posted_by', select: 'name' }
     })
   if (!question) {
