@@ -32,7 +32,10 @@ const getUserDetails = async (req, res) => {
   const { userId } = req.user
   const user = await User
     .findOne({ _id: userId }, '_id name email')
-    .populate('questions')
+    .populate({
+      path: 'questions',
+      populate: { path: 'answers' }
+    })
   if (!user) {
     throw new UnAuthenticatedError('You are not authorized')
   }
