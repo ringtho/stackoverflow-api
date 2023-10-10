@@ -29,9 +29,9 @@ const login = async (req, res) => {
 }
 
 const getUserDetails = async (req, res) => {
-  const { userId } = req.user
+  const { id } = req.params
   const user = await User
-    .findOne({ _id: userId }, '_id name email')
+    .findOne({ _id: id }, '_id name email')
     .populate({
       path: 'questions',
       populate: { path: 'answers' }
