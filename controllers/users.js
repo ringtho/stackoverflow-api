@@ -13,17 +13,14 @@ const login = async (req, res) => {
   if (!email || !password) {
     throw new BadRequestError('Please provide an email and a password')
   }
-
   const user = await User.findOne({ email })
   if (!user) {
     throw new UnAuthenticatedError('Invalid Credentials')
   }
-
   const isPasswordCorrect = await user.checkPassword(password)
   if (!isPasswordCorrect) {
     throw new UnAuthenticatedError('Invalid Credentials')
   }
-
   const token = user.createJWT()
   res.status(StatusCodes.OK).json({ user: { name: user.name }, token })
 }
@@ -42,4 +39,10 @@ const getUserDetails = async (req, res) => {
   res.status(StatusCodes.OK).json({ user })
 }
 
-module.exports = { signup, login, getUserDetails }
+const getLoggedInUser = async (req, res) => {
+  const { userId } = req.user
+  const user = await User.findOne({ _id: userId }, 'name email')
+  res.status(StatusCodes.OK).json({ user })
+}
+
+module.exports = { signup, login, getUserDetails, getLoggedInUser }
